@@ -4,44 +4,44 @@ import { Repository } from 'typeorm';
 import { from } from 'rxjs/internal/observable/from';
 import { map } from 'rxjs/operators';
 import { responseByAffect, responseByData } from 'src/core/response.util';
-import { Dept } from 'src/entity/dept';
+import { Rank } from 'src/entity/rank';
 
 @Injectable()
-export class DeptService {
+export class RankService {
   constructor(
-    @InjectRepository(Dept)
-    private deptRepository: Repository<Dept>,
+    @InjectRepository(Rank)
+    private rankRepository: Repository<Rank>,
   ) {}
 
   findAll() {
-    return from(this.deptRepository.find({ relations: ['district'] })).pipe(
-      map((res) => responseByData(res)),
-    );
+    return from(
+      this.rankRepository.find({ relations: ['staff', 'dept'] }),
+    ).pipe(map((res) => responseByData(res)));
   }
 
   findOne(id: number) {
     return from(
-      this.deptRepository.findOne({
+      this.rankRepository.findOne({
         where: { id: id },
-        relations: ['district'],
+        relations: ['staff', 'dept'],
       }),
     ).pipe(map((res) => responseByData(res)));
   }
 
-  create(dept: Dept) {
-    return from(this.deptRepository.save(dept)).pipe(
+  create(rank: Rank) {
+    return from(this.rankRepository.save(rank)).pipe(
       map((res) => responseByAffect({ success: !!res.id, id: res.id })),
     );
   }
 
-  update(id: number, dept: Dept) {
-    return from(this.deptRepository.update(id, dept)).pipe(
+  update(id: number, rank: Rank) {
+    return from(this.rankRepository.update(id, rank)).pipe(
       map((res) => responseByAffect({ success: res.affected > 0 })),
     );
   }
 
   delete(id: number) {
-    return from(this.deptRepository.delete(id)).pipe(
+    return from(this.rankRepository.delete(id)).pipe(
       map((res) => responseByAffect({ success: res.affected > 0 })),
     );
   }

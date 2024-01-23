@@ -10,6 +10,11 @@ import { DistrictController } from './controller/district.controller';
 import { DeptController } from './controller/dept.controller';
 import { DeptService } from './service/dept.service';
 import { DistrictService } from './service/district.service';
+import { StaffService } from './service/staff.service';
+import { Staff } from './entity/staff';
+import { Rank } from './entity/rank';
+import { RankController } from './controller/rank.controller';
+import { RankService } from './service/rank.service';
 
 @Module({
   imports: [
@@ -20,16 +25,23 @@ import { DistrictService } from './service/district.service';
       username: 'root',
       password: '',
       database: 'organize',
-      entities: [District, Dept],
+      entities: [District, Dept, Staff, Rank],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([District, Dept]),
+    TypeOrmModule.forFeature([District, Dept, Staff, Rank]),
   ],
-  controllers: [AppController, DistrictController, DeptController],
+  controllers: [
+    AppController,
+    DistrictController,
+    DeptController,
+    RankController,
+  ],
   providers: [
     AppService,
     DeptService,
     DistrictService,
+    StaffService,
+    RankService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
