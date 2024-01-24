@@ -9,16 +9,7 @@ import {
 import { Staff } from './staff';
 import { Dept } from './dept';
 
-export class RankDTO {
-  @IsNotEmpty()
-  public readonly level: number;
-
-  @IsNotEmpty()
-  public readonly deptId: number;
-
-  /**
-   * Staff Entity
-   * */
+export class StaffDTO {
   @IsNotEmpty()
   public readonly name: string;
 
@@ -30,6 +21,14 @@ export class RankDTO {
 
   @IsNotEmpty()
   public readonly updatedBy: number;
+}
+
+export class RankDTO extends StaffDTO {
+  @IsNotEmpty()
+  public readonly level: number;
+
+  @IsNotEmpty()
+  public readonly deptId: number;
 }
 
 @Entity()

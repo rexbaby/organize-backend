@@ -1,7 +1,14 @@
 export interface IResponse {
   error?: IError;
   data?: any;
+  limit?: ILimit;
   affect?: IResAffected;
+}
+
+export interface ILimit {
+  length: number;
+  pageIndex: number;
+  pageSize: number;
 }
 
 export interface IResAffected {
@@ -15,8 +22,8 @@ export interface IError {
   timestamp: string;
 }
 
-export function responseByData(data: any): IResponse {
-  return { data };
+export function responseByData(data: any, limit?: ILimit): IResponse {
+  return { data, limit };
 }
 
 export function responseByAffect(affect: IResAffected): IResponse {

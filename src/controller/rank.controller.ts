@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Put,
-  Delete,
   Body,
   Param,
   UsePipes,
@@ -13,7 +12,7 @@ import { plainToInstance } from 'class-transformer';
 import { of } from 'rxjs/internal/observable/of';
 import { switchMap, take } from 'rxjs/operators';
 import { Dept } from 'src/entity/dept';
-import { Rank, RankDTO } from 'src/entity/rank';
+import { Rank, RankDTO, StaffDTO } from 'src/entity/rank';
 import { Staff } from 'src/entity/staff';
 import { RankService } from 'src/service/rank.service';
 import { StaffService } from 'src/service/staff.service';
@@ -33,6 +32,52 @@ export class RankController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.rankService.findOne(id);
+  }
+
+  @Post('district')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  findByDistrictId(
+    @Body('districtId') districtId: number,
+    @Body('pageIndex') pageIndex: number,
+    @Body('pageSize') pageSize: number,
+  ) {
+    return this.rankService.findByDistrictId(districtId, pageIndex, pageSize);
+  }
+
+  @Post('dept')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  findByDeptId(
+    @Body('deptId') deptId: number,
+    @Body('pageIndex') pageIndex: number,
+    @Body('pageSize') pageSize: number,
+  ) {
+    return this.rankService.findByDeptId(deptId, pageIndex, pageSize);
+  }
+
+  @Post('level')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  findByLevel(
+    @Body('level') level: number,
+    @Body('pageIndex') pageIndex: number,
+    @Body('pageSize') pageSize: number,
+  ) {
+    return this.rankService.findByLevel(level, pageIndex, pageSize);
+  }
+
+  @Post('leveldown')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  findByDeptIdAndLevel(
+    @Body('deptId') deptId: number,
+    @Body('level') level: number,
+    @Body('pageIndex') pageIndex: number,
+    @Body('pageSize') pageSize: number,
+  ) {
+    return this.rankService.findByDeptIdAndLevel(
+      deptId,
+      level,
+      pageIndex,
+      pageSize,
+    );
   }
 
   @Post()
@@ -60,12 +105,8 @@ export class RankController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() rank: Rank) {
-    return this.rankService.update(id, rank);
-  }
-
-  @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.rankService.delete(id);
+  updateStaff(@Param('id') id: number, @Body() staffDTO: StaffDTO) {
+    const s = plainToInstance(Staff, staffDTO);
+    return this.staffService.update(id, s);
   }
 }
