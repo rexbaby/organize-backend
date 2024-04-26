@@ -23,6 +23,11 @@ export class DeptController {
     return this.deptService.findAll();
   }
 
+  @Get('district/:districtId')
+  findAllByDistrict(@Param('districtId') id: number) {
+    return this.deptService.findAllByDistrict(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.deptService.findOne(id);

@@ -19,6 +19,15 @@ export class DeptService {
     );
   }
 
+  findAllByDistrict(districtID: number) {
+    return from(
+      this.deptRepository.find({
+        where: { district: { id: districtID } },
+        relations: ['district'],
+      }),
+    ).pipe(map((res) => responseByData(res)));
+  }
+
   findOne(id: number) {
     return from(
       this.deptRepository.findOne({
