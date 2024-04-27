@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: pwa-node
+name: organize-backend
 type: kubernetes
 steps:
   - name: build
