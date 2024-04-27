@@ -15,7 +15,9 @@ export class RankService {
 
   findAll() {
     return from(
-      this.rankRepository.find({ relations: ['staff', 'dept'] }),
+      this.rankRepository.find({
+        relations: ['staff', 'dept', 'dept.district'],
+      }),
     ).pipe(map((res) => responseByData(res)));
   }
 
@@ -39,6 +41,7 @@ export class RankService {
           'dept.districtId = :districtId',
           { districtId },
         )
+        .innerJoinAndSelect('dept.district', 'district')
         .skip(pageIndex * pageSize)
         .take(pageSize)
         .getManyAndCount(),
@@ -61,6 +64,7 @@ export class RankService {
         .innerJoinAndSelect('rank.dept', 'dept', 'dept.id = :deptId', {
           deptId,
         })
+        .innerJoinAndSelect('dept.district', 'district')
         .skip(pageIndex * pageSize)
         .take(pageSize)
         .getManyAndCount(),
