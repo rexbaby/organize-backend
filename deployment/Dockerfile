@@ -2,11 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-
-RUN [ "npm", "install" ]
-
-RUN [ "npm", "run", "build" ]
-
 ADD dist /app/dist
 ADD package.json /app/package.json
 ADD package-lock.json /app/package-lock.json

@@ -3,6 +3,11 @@ kind: pipeline
 name: pwa-node
 type: kubernetes
 steps:
+  - name: build
+    image: node:18
+    commands:
+      - npm install
+      - npm run build
   - name: publish
     image: plugins/docker
     settings:
