@@ -13,7 +13,7 @@ import { plainToInstance } from 'class-transformer';
 import { District, DistrictDTO } from 'src/entity/district';
 import { DistrictService } from 'src/service/district.service';
 
-@Controller('district')
+@Controller('api/district')
 export class DistrictController {
   constructor(private districtService: DistrictService) {}
 

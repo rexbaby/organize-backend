@@ -17,7 +17,7 @@ import { Staff } from 'src/entity/staff';
 import { RankService } from 'src/service/rank.service';
 import { StaffService } from 'src/service/staff.service';
 
-@Controller('rank')
+@Controller('api/rank')
 export class RankController {
   constructor(
     private rankService: RankService,

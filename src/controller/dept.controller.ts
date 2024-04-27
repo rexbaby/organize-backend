@@ -14,7 +14,7 @@ import { Dept, DeptDTO } from 'src/entity/dept';
 import { District } from 'src/entity/district';
 import { DeptService } from 'src/service/dept.service';
 
-@Controller('dept')
+@Controller('api/dept')
 export class DeptController {
   constructor(private deptService: DeptService) {}
 
