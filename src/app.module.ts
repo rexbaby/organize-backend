@@ -20,10 +20,10 @@ import { RankService } from './service/rank.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'kubernetes.docker.internal',
       port: 3306,
-      username: 'root',
-      password: '',
+      username: 'rexbaby',
+      password: 'rexbaby@0427',
       database: 'organize',
       entities: [District, Dept, Staff, Rank],
       synchronize: true,
