@@ -2,13 +2,16 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+
+RUN [ "npm", "install" ]
+
+RUN [ "npm", "run", "build" ]
+
+ADD dist /app/dist
 ADD package.json /app/package.json
 ADD package-lock.json /app/package-lock.json
 ADD tsconfig.json /app/tsconfig.json
 ADD tsconfig.build.json /app/tsconfig.build.json
 
-RUN [ "npm", "install" ]
-
-RUN [ "npm", "run", "build" ]
 
 CMD ["npx", "nest", "start" ]
