@@ -3,11 +3,6 @@ kind: pipeline
 name: organize-backend
 type: kubernetes
 steps:
-  - name: build
-    image: node:20-alpine
-    commands:
-      - npm install
-      - npm run build
   - name: publish
     image: plugins/docker
     settings:

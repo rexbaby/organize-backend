@@ -2,6 +2,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-ADD dist /app/dist
+COPY ./* /app
 
-CMD ["node", "dist/main.js" ]
+RUN [ "npm", "install" ]
+
+CMD [ "npm", "start" ]
