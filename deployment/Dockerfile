@@ -9,4 +9,6 @@ ADD tsconfig.build.json /app/tsconfig.build.json
 
 RUN [ "npm", "install" ]
 
-CMD ["npm", "start" ]
+RUN [ "npm", "run", "build" ]
+
+CMD ["npx", "nest", "start" ]
