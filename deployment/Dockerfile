@@ -2,7 +2,7 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY ./* /app
+RUN [ "cp", "./*", "/app", "-R" ]
 
 RUN [ "npm", "install" ]
 
