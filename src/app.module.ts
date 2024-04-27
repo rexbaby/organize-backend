@@ -20,7 +20,7 @@ import { RankService } from './service/rank.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '192.168.96.44',
+      host: '192.168.96.144',
       port: 3306,
       username: 'rexbaby',
       password: 'rexbaby@0427',
