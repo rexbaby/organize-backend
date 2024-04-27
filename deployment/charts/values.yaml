@@ -1,0 +1,22 @@
+
+name: organize-backend
+
+image: emmachang00000/organize-backend
+
+
+service:
+  - name: organize-backend
+    httpTargetPort: 3000
+
+ingressroute:
+  - certResolver: cf
+    name: organize-backend
+    domain: organize-backend.rex.baby
+    service: organize-backend
+
+
+# volumeSecret:
+# - name: fcm-service
+#   secretName: fcm-service
+#   mountPath: /app/fcm-service
+  
