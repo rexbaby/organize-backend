@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { from } from 'rxjs/internal/observable/from';
 import { map } from 'rxjs/operators';
 import { responseByAffect, responseByData } from 'src/core/response.util';
-import { District } from 'src/entity/district';
+import { CreateDistrictDTO, District, UpdateDistrictDTO } from 'src/entity/district';
 
 @Injectable()
 export class DistrictService {
@@ -25,14 +25,19 @@ export class DistrictService {
     );
   }
 
-  create(district: District) {
-    return from(this.districtRepository.save(district)).pipe(
+  create(dto: CreateDistrictDTO) {
+    const newDto = this.districtRepository.create({
+      ...dto,
+      status: 1,
+    });
+
+    return from(this.districtRepository.save(newDto)).pipe(
       map((res) => responseByAffect({ success: !!res.id, id: res.id })),
     );
   }
 
-  update(id: number, district: District) {
-    return from(this.districtRepository.update(id, district)).pipe(
+  update(id: number, dto: UpdateDistrictDTO) {
+    return from(this.districtRepository.update(id, dto)).pipe(
       map((res) => responseByAffect({ success: res.affected > 0 })),
     );
   }

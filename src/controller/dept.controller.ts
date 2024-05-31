@@ -8,10 +8,9 @@ import {
   Param,
   UsePipes,
   ValidationPipe,
+  Patch,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Dept, DeptDTO } from 'src/entity/dept';
-import { District } from 'src/entity/district';
+import { CreateDeptDTO, UpdateDeptDTO } from 'src/entity/dept';
 import { DeptService } from 'src/service/dept.service';
 
 @Controller('api/dept')
@@ -23,28 +22,30 @@ export class DeptController {
     return this.deptService.findAll();
   }
 
-  @Get('district/:districtId')
-  findAllByDistrict(@Param('districtId') id: number) {
-    return this.deptService.findAllByDistrict(id);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.deptService.findOne(id);
   }
 
+  @Get('district/:districtId')
+  findAllByDistrict(@Param('districtId') id: number) {
+    return this.deptService.findAllByDistrict(id);
+  }
+
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  create(@Body() deptDTO: DeptDTO) {
-    const p = plainToInstance(Dept, deptDTO);
-    p.district = new District();
-    p.district.id = deptDTO.districtId;
-    return this.deptService.create(p);
+  create(@Body() dto: CreateDeptDTO) {
+    return this.deptService.create(dto);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() dept: Dept) {
-    return this.deptService.update(id, dept);
+  update(@Param('id') id: number, @Body() dto: UpdateDeptDTO) {
+    return this.deptService.update(id, dto);
+  }
+
+  @Patch(':id')
+  partial(@Param('id') id: number, @Body() dto: UpdateDeptDTO) {
+    return this.deptService.partial(id, dto);
   }
 
   @Delete(':id')

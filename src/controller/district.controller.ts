@@ -9,13 +9,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { District, DistrictDTO } from 'src/entity/district';
+import { CreateDistrictDTO, UpdateDistrictDTO } from 'src/entity/district';
 import { DistrictService } from 'src/service/district.service';
 
 @Controller('api/district')
 export class DistrictController {
-  constructor(private districtService: DistrictService) {}
+  constructor(private districtService: DistrictService) { }
 
   @Get()
   findAll() {
@@ -29,15 +28,13 @@ export class DistrictController {
 
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  create(@Body() districtDTO: DistrictDTO) {
-    const p = plainToInstance(District, districtDTO);
-
-    return this.districtService.create(p);
+  create(@Body() dto: CreateDistrictDTO) {
+    return this.districtService.create(dto);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() district: District) {
-    return this.districtService.update(id, district);
+  update(@Param('id') id: number, @Body() dto: UpdateDistrictDTO) {
+    return this.districtService.update(id, dto);
   }
 
   @Delete(':id')

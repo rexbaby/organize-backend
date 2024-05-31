@@ -1,11 +1,16 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export class DistrictDTO {
+export class CreateDistrictDTO {
+  @IsNotEmpty()
+  public readonly name: string;
+}
+
+export class UpdateDistrictDTO {
   @IsNotEmpty()
   public readonly name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   public readonly status: number;
 }
 

@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import {
   Entity,
   Column,
@@ -9,21 +9,32 @@ import {
 } from 'typeorm';
 import { District } from './district';
 
-export class DeptDTO {
+export class CreateDeptDTO {
   @IsNotEmpty()
   public readonly name: string;
 
   @IsNotEmpty()
-  public readonly status: number;
+  public readonly phone: string;
+
+  @IsNotEmpty()
+  public readonly address: string;
 
   @IsNotEmpty()
   public readonly districtId: number;
+}
 
-  @IsNotEmpty()
-  public readonly createdBy: number;
+export class UpdateDeptDTO {
+  @IsOptional()
+  public readonly name?: string;
 
-  @IsNotEmpty()
-  public readonly updatedBy: number;
+  @IsOptional()
+  public readonly phone?: string;
+
+  @IsOptional()
+  public readonly address?: string;
+
+  @IsOptional()
+  public readonly status: number;
 }
 
 @Entity()
@@ -34,12 +45,18 @@ export class Dept {
   @Column({ default: '' })
   name: string;
 
-  @Column({ default: 1 })
-  status: number;
+  @Column({ default: '' })
+  phone: string;
+
+  @Column({ default: '' })
+  address: string;
 
   @ManyToOne(() => District)
   @JoinColumn({ name: 'districtId' })
   district: District;
+
+  @Column({ default: 1 })
+  status: number;
 
   @Column()
   @UpdateDateColumn()
