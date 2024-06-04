@@ -72,7 +72,7 @@ export class Staff {
   status: number;
 
   @Column()
-  @UpdateDateColumn()
+  @UpdateDateColumn({ update: false })
   createdOn: Date;
 
   @Column({ default: 1 })

@@ -41,10 +41,4 @@ export class DistrictService {
       map((res) => responseByAffect({ success: res.affected > 0 })),
     );
   }
-
-  delete(id: number) {
-    return from(this.districtRepository.delete(id)).pipe(
-      map((res) => responseByAffect({ success: res.affected > 0 })),
-    );
-  }
 }

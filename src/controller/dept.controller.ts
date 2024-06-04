@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Put,
-  Delete,
   Body,
   Param,
   UsePipes,
@@ -15,7 +14,7 @@ import { DeptService } from 'src/service/dept.service';
 
 @Controller('api/dept')
 export class DeptController {
-  constructor(private deptService: DeptService) {}
+  constructor(private deptService: DeptService) { }
 
   @Get()
   findAll() {
@@ -46,10 +45,5 @@ export class DeptController {
   @Patch(':id')
   partial(@Param('id') id: number, @Body() dto: UpdateDeptDTO) {
     return this.deptService.partial(id, dto);
-  }
-
-  @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.deptService.delete(id);
   }
 }

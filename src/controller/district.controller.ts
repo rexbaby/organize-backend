@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Put,
-  Delete,
   Body,
   Param,
   UsePipes,
@@ -35,10 +34,5 @@ export class DistrictController {
   @Put(':id')
   update(@Param('id') id: number, @Body() dto: UpdateDistrictDTO) {
     return this.districtService.update(id, dto);
-  }
-
-  @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.districtService.delete(id);
   }
 }

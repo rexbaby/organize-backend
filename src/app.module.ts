@@ -12,40 +12,39 @@ import { DeptService } from './service/dept.service';
 import { DistrictService } from './service/district.service';
 import { StaffService } from './service/staff.service';
 import { Staff } from './entity/staff';
-import { Rank } from './entity/rank';
-import { RankController } from './controller/rank.controller';
-import { RankService } from './service/rank.service';
+import { Updistrict } from './entity/up-district';
+import { Updept } from './entity/up-dept';
+import { StaffController } from './controller/staff.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '192.168.96.144',
+      host: 'localhost',
       port: 3306,
-      username: 'rexbaby',
-      password: 'rexbaby@0427',
+      username: 'root',
+      password: 'emma@0414',
       database: 'organize',
-      entities: [District, Dept, Staff, Rank],
+      entities: [District, Dept, Staff, Updistrict, Updept],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([District, Dept, Staff, Rank]),
+    TypeOrmModule.forFeature([District, Dept, Staff, Updistrict, Updept]),
   ],
   controllers: [
     AppController,
     DistrictController,
     DeptController,
-    RankController,
+    StaffController
   ],
   providers: [
     AppService,
     DeptService,
     DistrictService,
     StaffService,
-    RankService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

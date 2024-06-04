@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { from } from 'rxjs/internal/observable/from';
 import { map, switchMap } from 'rxjs/operators';
-import { responseByAffect, responseByData } from 'src/core/response.util';
+import { responseByAffect, responseByData, responseByError } from 'src/core/response.util';
 import { CreateDeptDTO, Dept, UpdateDeptDTO } from 'src/entity/dept';
+import { of } from 'rxjs/internal/observable/of';
 
 @Injectable()
 export class DeptService {
   constructor(
-    @InjectRepository(Dept)
-    private deptRepository: Repository<Dept>,
+    @InjectRepository(Dept) private deptRepository: Repository<Dept>,
   ) { }
 
   findAll() {
@@ -24,14 +24,14 @@ export class DeptService {
       this.deptRepository.findOne({
         where: { id: id },
         relations: ['district'],
-      }),
+      })
     ).pipe(map((res) => responseByData(res)));
   }
 
-  findAllByDistrict(districtID: number) {
+  findAllByDistrict(districtId: number) {
     return from(
       this.deptRepository.find({
-        where: { district: { id: districtID } },
+        where: { district: { id: districtId } },
         relations: ['district'],
       }),
     ).pipe(map((res) => responseByData(res)));
@@ -43,6 +43,7 @@ export class DeptService {
       status: 1,
       createdBy: 1,
       updatedBy: 1,
+      district: { id: dto.districtId }
     });
 
     return from(this.deptRepository.save(newDto)).pipe(
@@ -65,7 +66,11 @@ export class DeptService {
     return from(this.deptRepository.findOne({ where: { id } })).pipe(
       switchMap((dept: Dept) => {
         if (!dept) {
-          throw new Error(`Dept with ID ${id} not found`);
+          return of(responseByError({
+            code: 'F01',
+            message: `Dept with ID:${id} not found`,
+            timestamp: new Date().toISOString()
+          }))
         }
         const newDto = { ...dept, ...dto };
 
@@ -73,12 +78,6 @@ export class DeptService {
           map(res => responseByAffect({ success: !!res.id, id: res.id })),
         );
       }),
-    );
-  }
-
-  delete(id: number) {
-    return from(this.deptRepository.delete(id)).pipe(
-      map((res) => responseByAffect({ success: res.affected > 0 })),
     );
   }
 }

@@ -14,10 +14,12 @@ export interface ILimit {
 export interface IResAffected {
   success: boolean;
   id?: number;
+  row?: number;
+  sum?: number;
 }
 
 export interface IError {
-  code: number;
+  code: number | string;
   message: string;
   timestamp: string;
 }
@@ -28,4 +30,8 @@ export function responseByData(data: any, limit?: ILimit): IResponse {
 
 export function responseByAffect(affect: IResAffected): IResponse {
   return { affect };
+}
+
+export function responseByError(error: IError): IResponse {
+  return { error };
 }
