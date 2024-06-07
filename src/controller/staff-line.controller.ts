@@ -10,6 +10,21 @@ import { StaffLineService } from 'src/service/staff-line.service';
 export class StaffLineController {
   constructor(private staffLineService: StaffLineService) { }
 
+  @Get('district/:districtId')
+  findStaffByDistrict(@Param('districtId') districtId: number) {
+    return this.staffLineService.findStaffByDistrict(districtId);
+  }
+
+  @Get('dept/:deptId')
+  findStaffByDept(@Param('deptId') deptId: number) {
+    return this.staffLineService.findStaffByDept(deptId);
+  }
+
+  @Get('staff/:staffId')
+  findStaffByManager(@Param('staffId') staffId: number) {
+    return this.staffLineService.findStaffByManager(staffId);
+  }
+
   /* 
     * 地點搜尋Test
     */

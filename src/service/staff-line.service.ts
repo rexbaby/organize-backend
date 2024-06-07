@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { from } from 'rxjs/internal/observable/from';
-import { concatMap, map, toArray } from 'rxjs/operators';
-import { responseByData } from 'src/core/response.util';
+import { concatMap, map, switchMap, take, toArray } from 'rxjs/operators';
+import { responseByData, responseByError } from 'src/core/response.util';
 import { Staff } from 'src/entity/staff';
 import { Updistrict } from 'src/entity/up-district';
 import { Updept } from 'src/entity/up-dept';
@@ -47,27 +47,97 @@ export class StaffLineService {
   ) { }
 
   /* 
-   * 轄下流程
+   * Staff List
    */
   findStaffByDistrict(districtId: number) {
-    // this.districtManagerByStaffId(districtId).pipe(take(1)).subscribe((districtManagers) => {
-    //   console.log(11, districtManagers);
+    return this.districtManagerByDistrictId(districtId).pipe(
+      switchMap((resByDistrictManagers) => {
+        const districtManagers = resByDistrictManagers;
 
-    //   this.deptsByDistrict(districtId).pipe(take(1)).subscribe((depts) => {
-    //     console.log(22, depts);
+        return this.deptsByDistrictId(districtId).pipe(
+          switchMap((resDeptIds) => {
+            const deptIds = resDeptIds;
 
-    //     const deptIds = depts.map((dept) => dept.id)
-    //     this.deptsManager(deptIds).pipe(take(1)).subscribe((deptsManagers) => {
-    //       console.log(33, deptsManagers);
+            return this.deptManagerByDepts(deptIds).pipe(
+              switchMap((resDeptManagers) => {
+                const deptManagers = resDeptManagers;
 
-    //       this.deptsStaff(deptIds).pipe(take(1)).subscribe((deptsStaffs) => {
-    //         console.log(44, deptsStaffs);
-    //       })
-    //     })
-    //   })
-
-    // })
+                return this.staffByDepts(deptIds).pipe(
+                  map((resStaffs) => {
+                    const staffs = resStaffs;
+                    const all = districtManagers.concat(deptManagers).concat(staffs);
+                    return all;
+                  })
+                );
+              })
+            );
+          })
+        );
+      })
+    );
   }
+
+  findStaffByDept(deptId: number) {
+    return this.deptManagerByDeptId(deptId).pipe(
+      switchMap((resDeptManagers) => {
+        const deptManagers = resDeptManagers;
+
+        return this.staffByDeptId(deptId).pipe(
+          map((resStaffs) => {
+            const staffs = resStaffs;
+            const all = deptManagers.concat(staffs);
+            return all;
+          }));
+      }))
+  }
+
+  findStaffByManager(staffId: number) {
+    return from(this.staffRepository.findOne({ where: { id: staffId } })).pipe(
+      switchMap((staff) => {
+        switch (staff.level) {
+          case 2:
+            return this.deptsByDeptManger(staffId).pipe(
+              switchMap((resDeptIds) => {
+                const deptIds = resDeptIds;
+                return this.staffByDepts(deptIds);
+              })
+            );
+          case 3:
+            return this.districtsByDistrictManger(staffId).pipe(
+              switchMap((resDistrictIds) => {
+                const districtIds = resDistrictIds;
+                return this.deptsByDistricts(districtIds).pipe(
+                  switchMap((resDeptIds) => {
+                    const deptIds = resDeptIds;
+
+                    return this.deptManagerByDepts(deptIds).pipe(
+                      switchMap((resDeptManagers) => {
+                        const deptManagers = resDeptManagers;
+
+                        return this.staffByDepts(deptIds).pipe(
+                          map((resStaffs) => {
+                            const staffs = resStaffs;
+                            const all = deptManagers.concat(staffs);
+                            return all;
+                          })
+                        );
+                      })
+                    );
+                  })
+                );
+              })
+            );
+          default:
+            return of(responseByError({
+              code: 'S04',
+              message: `Staff with ID:${staffId} level does not exist`,
+              timestamp: new Date().toISOString()
+            }));
+        }
+      })
+    );
+  }
+
 
   /* 
    * 地點搜尋Test
@@ -111,7 +181,8 @@ export class StaffLineService {
     return from(
       this.deptRepository.find({
         where: { district: { id: districtId } },
-        relations: ['district'],
+      })).pipe(map((depts: Dept[]) => {
+        return depts.map((dept) => dept.id)
       }))
   }
 
@@ -123,7 +194,9 @@ export class StaffLineService {
   }
 
   private deptsByDistricts(districtIds: number[]) {
-    return from(this.deptRepository.find({ where: { district: { id: In(districtIds) } }, relations: ['district'] }))
+    return from(this.deptRepository.find({ where: { district: { id: In(districtIds) } } })).pipe(map((depts: Dept[]) => {
+      return depts.map((dept) => dept.id)
+    }))
   }
 
   /* 
