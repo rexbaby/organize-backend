@@ -15,6 +15,10 @@ import { Staff } from './entity/staff';
 import { Updistrict } from './entity/up-district';
 import { Updept } from './entity/up-dept';
 import { StaffController } from './controller/staff.controller';
+import { StaffUpController } from './controller/staff-up.controller';
+import { StaffLineController } from './controller/staff-line.controller';
+import { StaffUpService } from './service/staff-up.service';
+import { StaffLineService } from './service/staff-line.service';
 
 @Module({
   imports: [
@@ -34,13 +38,17 @@ import { StaffController } from './controller/staff.controller';
     AppController,
     DistrictController,
     DeptController,
-    StaffController
+    StaffController,
+    StaffUpController,
+    StaffLineController
   ],
   providers: [
     AppService,
     DeptService,
     DistrictService,
     StaffService,
+    StaffUpService,
+    StaffLineService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
