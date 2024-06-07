@@ -80,7 +80,10 @@ export class StaffLineService {
   }
 
   private districtsByDistrictManger(staffId: number) {
-    return from(this.updistrictRepository.find({ where: { staff: { id: staffId } }, relations: ['district'] }))
+    return from(this.updistrictRepository.find({ where: { staff: { id: staffId } }, relations: ['district'] })).pipe(
+      map((updistricts: Updistrict[]) => {
+        return updistricts.map((updistrict) => updistrict.district.id)
+      }))
   }
 
   // 查通訊處-處經理員工id
@@ -91,7 +94,10 @@ export class StaffLineService {
   }
 
   private deptsByDeptManger(staffId: number) {
-    return from(this.updeptRepository.find({ where: { staff: { id: staffId } }, relations: ['dept'] }))
+    return from(this.updeptRepository.find({ where: { staff: { id: staffId } }, relations: ['dept'] })).pipe(
+      map((updepts: Updept[]) => {
+        return updepts.map((updept) => updept.dept.id)
+      }))
   }
 
   // 查通訊處-區域條件

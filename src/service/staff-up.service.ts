@@ -75,14 +75,14 @@ export class StaffUpService {
                           return responseByAffect({ success: true, row, sum });
                         })
                       );
-                    } else { }
-                    return of(responseByError({
-                      code: 'S03',
-                      message: `Failed to delete all department managers for Staff with ID: ${id}`,
-                      timestamp: new Date().toISOString()
-                    }));
-                  }
-                  ))
+                    } else { 
+                      return of(responseByError({
+                        code: 'S03',
+                        message: `Failed to delete all department managers for Staff with ID: ${id}`,
+                        timestamp: new Date().toISOString()
+                      }));
+                    }
+                  }))
               } else {
                 return of(responseByError({
                   code: 'S03',

@@ -11,7 +11,7 @@ export class StaffLineController {
   constructor(private staffLineService: StaffLineService) { }
 
   /* 
-    * 地點搜尋
+    * 地點搜尋Test
     */
   // 查區域-區經理員工id
   @Get('testDistrictsByDistrictManger/:staffId')
@@ -38,7 +38,7 @@ export class StaffLineController {
   }
 
   /* 
-   * 人員搜尋
+   * 人員搜尋Test
    */
   // 查區經理-員工id條件
   @Get('testDistrictManagerByStaffId/:staffId')
@@ -65,7 +65,7 @@ export class StaffLineController {
   }
 
   // 查通訊處經理-多通訊處條件
-  @Get('test/deptsManager/:deptIds')
+  @Get('testDeptManagerByDepts/:deptIds')
   testDeptManagerByDepts(@Param('deptIds', new ParseArrayPipe({ items: Number, separator: ',' })) deptIds: number[]) {
     return this.staffLineService.testDeptManagerByDepts(deptIds);
   }
