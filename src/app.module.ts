@@ -19,15 +19,14 @@ import { StaffUpController } from './controller/staff-up.controller';
 import { StaffLineController } from './controller/staff-line.controller';
 import { StaffUpService } from './service/staff-up.service';
 import { StaffLineService } from './service/staff-line.service';
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: '192.168.96.144',
       port: 3306,
-      username: 'root',
-      password: 'emma@0414',
+      username: 'rexbaby',
+      password: 'rexbaby@0427',
       database: 'organize',
       entities: [District, Dept, Staff, Updistrict, Updept],
       synchronize: true,
